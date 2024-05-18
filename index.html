@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Folder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Delete Folder</h1>
+    <input type="text" id="folderPath" placeholder="Enter folder path" />
+    <button id="deleteButton">Delete Folder</button>
+    <div id="loading">Loading...</div>
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('deleteButton').addEventListener('click', () => {
+            const folderPath = 'D:\m';
+            const loadingDiv = document.getElementById('loading');
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = '';
+            
+            if (!folderPath) {
+                messageDiv.innerHTML = 'Please enter a folder path.';
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+
+            fetch('https://job-details-9dk6.onrender.com/deleteFolder', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ folderPath })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.style.display = 'none';
+                messageDiv.innerHTML = data.message || data.error;
+            })
+            .catch(error => {
+                loadingDiv.style.display = 'none';
+                messageDiv.innerHTML = 'An error occurred.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
