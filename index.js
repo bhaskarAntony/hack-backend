@@ -5,7 +5,7 @@ const path = require('path'); // Import the path module
 const cors = require('cors')
 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.delete('/deleteFile', (req, res) => {
     const { filePath } = req.body;
