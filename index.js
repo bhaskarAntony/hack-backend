@@ -29,7 +29,7 @@ app.delete('/deleteFolder', (req, res) => {
     fs.rmdir(folderPath, { recursive: true }, (error) => {
         if (error) {
             console.error('Error deleting folder:', error);
-            return res.status(500).json({ error: 'Error deleting folder' });
+            return res.status(500).json({ error: error });
         }
         res.status(200).json({ message: 'Folder deleted successfully' });
     });

@@ -17,18 +17,18 @@
 </head>
 <body>
     <h1>Delete Folder</h1>
-    <input type="text" id="folderPath" placeholder="Enter folder path" />
+    <input type="text" id="folderPath" placeholder="Enter folder path" value="D:\\w\\p9" />
     <button id="deleteButton">Delete Folder</button>
     <div id="loading">Loading...</div>
     <div id="message"></div>
 
     <script>
         document.getElementById('deleteButton').addEventListener('click', () => {
-            const folderPath = 'D:\\w\\adwanced';
+            const folderPath = document.getElementById('folderPath').value;
             const loadingDiv = document.getElementById('loading');
             const messageDiv = document.getElementById('message');
             messageDiv.innerHTML = '';
-            
+
             if (!folderPath) {
                 messageDiv.innerHTML = 'Please enter a folder path.';
                 return;
@@ -36,21 +36,26 @@
 
             loadingDiv.style.display = 'block';
 
-            fetch('https://job-details-9dk6.onrender.com/deleteFolder', {
+            fetch('http://localhost:3000/deleteFolder', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ folderPath })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 loadingDiv.style.display = 'none';
                 messageDiv.innerHTML = data.message || data.error;
             })
             .catch(error => {
                 loadingDiv.style.display = 'none';
-                messageDiv.innerHTML = 'An error occurred.';
+                messageDiv.innerHTML = 'An error occurred: ' + error.message;
                 console.error('Error:', error);
             });
         });
